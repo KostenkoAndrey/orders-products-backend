@@ -1,0 +1,23 @@
+{
+  "name": "orders-products-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint src/**/*.js"
+  },
+  "keywords": [],
+  "author": "Andrii Kostenko <kostenkoandrey14@gmail.com>",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
