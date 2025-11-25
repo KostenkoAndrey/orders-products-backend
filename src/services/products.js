@@ -11,8 +11,8 @@ export const getProductById = async (productId, orderId) => {
   });
 };
 
-export const createProduct = async (payload) => {
-  return ProductsCollection.create(payload);
+export const createProduct = async (payload, photoUrl) => {
+  return ProductsCollection.create({ ...payload, photo: photoUrl });
 };
 
 export const deleteProduct = async (productId) => {

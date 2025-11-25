@@ -12,7 +12,7 @@ export const loginUserSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30),
   photo: Joi.string().allow('', null).optional(),
 });
 

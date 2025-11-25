@@ -35,12 +35,23 @@ export const getProductsByIdController = async (req, res) => {
 export const createProductController = async (req, res) => {
   const { orderId } = req.body;
   const order = await getOrderById(orderId, req.user._id);
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
 
   if (!order) {
     throw createHttpError(404, 'Order not found');
   }
 
-  const product = await createProduct(req.body);
+  const product = await createProduct(req.body, photoUrl);
 
   res.status(201).json({
     status: 201,
