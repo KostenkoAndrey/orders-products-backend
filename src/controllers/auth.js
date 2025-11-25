@@ -1,5 +1,6 @@
-import { ONE_DAY } from '../constants/index.js';
-import { registerUser, loginUser, logoutUser } from '../services/auth.js';
+import { ONE_DAY, COOKIE_OPTIONS } from '../constants/index.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
+import { registerUser, loginUser, logoutUser, loginOrSignupWithGoogle } from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -11,23 +12,23 @@ export const registerUserController = async (req, res) => {
   });
 };
 
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+export const loginUserController = async (request, reply) => {
+  const { session, user } = await loginUser(request.body);
 
-  res.cookie('sessionToken', session.sessionToken, {
-    httpOnly: true,
+  reply.cookie('sessionToken', session.sessionToken, {
+    ...COOKIE_OPTIONS,
     expires: new Date(Date.now() + ONE_DAY),
   });
 
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
+  reply.cookie('sessionId', session._id.toString(), {
+    ...COOKIE_OPTIONS,
     expires: new Date(Date.now() + ONE_DAY),
   });
 
-  res.json({
+  return reply.send({
     status: 200,
     message: 'Successfully logged in an user!',
-    data: {},
+    data: user,
   });
 };
 
@@ -40,4 +41,38 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('sessionToken');
 
   res.status(204).send();
+};
+
+const setupSession = (reply, session) => {
+  reply.cookie('sessionToken', session.sessionToken, {
+    ...COOKIE_OPTIONS,
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+
+  reply.cookie('sessionId', session._id, {
+    ...COOKIE_OPTIONS,
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+};
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const { session, user } = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: user,
+  });
 };

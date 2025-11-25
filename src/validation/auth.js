@@ -16,6 +16,6 @@ export const updateUserSchema = Joi.object({
   photo: Joi.string().allow('', null).optional(),
 });
 
-export const confirmOAuthSchema = Joi.object({
+export const loginWithGoogleOAuthSchema = Joi.object({
   code: Joi.string().required(),
 });

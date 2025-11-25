@@ -8,3 +8,17 @@ export const CLOUDINARY = {
   CLOUDINARY_API_KEY: 'CLOUDINARY_API_KEY',
   CLOUDINARY_API_SECRET: 'CLOUDINARY_API_SECRET',
 };
+
+export const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'none',
+  path: '/',
+};
+
+// export const COOKIE_OPTIONS = {
+//   httpOnly: true,
+//   secure: false,
+//   sameSite: 'lax',
+//   path: '/',
+// };
