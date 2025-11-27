@@ -3,6 +3,17 @@ import { wsAuthenticate } from '../middlewares/wsAuthenticate.js';
 
 const clients = new Map();
 
+const broadcastActiveUsersCount = () => {
+  const count = clients.size;
+  const message = JSON.stringify({ count });
+
+  clients.forEach((clientData, ws) => {
+    if (ws.readyState === 1) {
+      ws.send(message);
+    }
+  });
+};
+
 export const setupWebSocket = (server) => {
   const wss = new WebSocketServer({
     server,
@@ -35,8 +46,11 @@ export const setupWebSocket = (server) => {
       }),
     );
 
+    broadcastActiveUsersCount();
+
     ws.on('close', () => {
       clients.delete(ws);
+      broadcastActiveUsersCount();
     });
 
     ws.on('error', (error) => {
@@ -46,5 +60,3 @@ export const setupWebSocket = (server) => {
 
   return wss;
 };
-
-export const getConnectedClients = () => clients;
