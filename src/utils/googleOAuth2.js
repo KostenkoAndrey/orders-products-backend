@@ -8,10 +8,14 @@ const googleOAuthClient = new OAuth2Client({
   redirectUri: getEnvVar('GOOGLE_AUTH_REDIRECT_URI'),
 });
 
-export const generateAuthUrl = () =>
-  googleOAuthClient.generateAuthUrl({
+export const generateAuthUrl = () => {
+  return googleOAuthClient.generateAuthUrl({
+    redirect_uri: getEnvVar('GOOGLE_AUTH_REDIRECT_URI'),
+    access_type: 'offline',
+    prompt: 'consent',
     scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
   });
+};
 
 export const validateCode = async (code) => {
   const response = await googleOAuthClient.getToken(code);
