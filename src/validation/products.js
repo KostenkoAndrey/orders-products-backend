@@ -7,8 +7,8 @@ export const createProductSchema = Joi.object({
   type: Joi.string().min(1).max(30).required(),
   specification: Joi.string().min(1).max(30).required(),
   guarantee: Joi.object({
-    start: Joi.date().required(),
-    end: Joi.date().required(),
+    start: Joi.date().iso().required(),
+    end: Joi.date().iso().required(),
   }).required(),
   price: Joi.array()
     .items(
@@ -20,7 +20,7 @@ export const createProductSchema = Joi.object({
     )
     .min(1)
     .required(),
-  date: Joi.date().required(),
+  date: Joi.date().iso().required(),
   orderId: Joi.string().required(),
 });
 
@@ -31,8 +31,8 @@ export const updateProductSchema = Joi.object({
   type: Joi.string().min(1).max(30),
   specification: Joi.string().min(1).max(30),
   guarantee: Joi.object({
-    start: Joi.date().required(),
-    end: Joi.date().required(),
+    start: Joi.date().iso().required(),
+    end: Joi.date().iso().required(),
   }),
   price: Joi.array()
     .items(
@@ -42,7 +42,8 @@ export const updateProductSchema = Joi.object({
         isDefault: Joi.boolean(),
       }),
     )
-    .min(1),
-  date: Joi.date(),
+    .min(1)
+    .required(),
+  date: Joi.date().iso(),
   orderId: Joi.string(),
 });

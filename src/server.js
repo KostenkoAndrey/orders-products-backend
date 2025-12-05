@@ -19,7 +19,7 @@ export const startServer = () => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: getEnvVar('APP_DOMAIN'),
+      origin: ['http://localhost:3001', getEnvVar('APP_DOMAIN')],
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Set-Cookie'],
